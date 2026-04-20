@@ -1,0 +1,6 @@
+@GasAguaAPI_HostAddress = http://localhost:5017
+
+GET {{GasAguaAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
