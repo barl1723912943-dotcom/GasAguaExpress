@@ -6,6 +6,6 @@ data class LoginRequest(
     @SerializedName("telefono")
     val telefono: String,
 
-    @SerializedName("contraseña") // Esto vincula tu código con la Ñ del servidor
-    val password: String
+    @SerializedName("clave") // Esto vincula tu código con la Ñ del servidor
+    val clave: String
 )
