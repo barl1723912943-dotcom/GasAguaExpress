@@ -10,7 +10,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface ApiService {
-    @POST("auth/login")
+    @POST("api/auth/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @GET("api/productos")
