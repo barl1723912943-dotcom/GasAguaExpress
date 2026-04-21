@@ -160,3 +160,4 @@ C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\refint\GasAguaAPI.dll
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.pdb
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.genruntimeconfig.cache
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\ref\GasAguaAPI.dll
+C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.sourcelink.json
