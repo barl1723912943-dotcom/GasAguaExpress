@@ -74,9 +74,9 @@ namespace GasAguaAPI.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             // Validate input
-            if (string.IsNullOrEmpty(request.Telefono) || string.IsNullOrEmpty(request.Contraseña))
+            if (string.IsNullOrEmpty(request.Telefono) || string.IsNullOrEmpty(request.Clave))
             {
-                return BadRequest(new { Message = "Teléfono y contraseña son obligatorios." });
+                return BadRequest(new { Message = "Teléfono y clave son obligatorios." });
             }
 
             // Find user by phone number
@@ -87,7 +87,7 @@ namespace GasAguaAPI.Controllers
             }
 
             // Verify password using BCrypt
-            bool isValidPassword = BCrypt.Net.BCrypt.Verify(request.Contraseña, user.ContraseñaHash);
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(request.Clave, user.ContraseñaHash);
             if (!isValidPassword)
             {
                 return Unauthorized(new { Message = "Credenciales inválidas." });
@@ -146,6 +146,6 @@ namespace GasAguaAPI.Controllers
     public class LoginRequest
     {
         public string Telefono { get; set; } = null!;
-        public string Contraseña { get; set; } = null!;
+        public string Clave { get; set; } = null!;
     }
 }
