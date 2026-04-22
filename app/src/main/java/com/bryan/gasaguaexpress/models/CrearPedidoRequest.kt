@@ -6,9 +6,12 @@ data class CrearPedidoRequest(
     @SerializedName("idProducto")
     val idProducto: String,
 
-    @SerializedName("idDireccion")
-    val idDireccion: String,
-
     @SerializedName("cantidad")
-    val cantidad: Int
+    val cantidad: Int,
+
+    @SerializedName("latitud")
+    val latitud: Double,
+
+    @SerializedName("longitud")
+    val longitud: Double
 )
