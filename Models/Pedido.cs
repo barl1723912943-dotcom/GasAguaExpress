@@ -29,5 +29,7 @@ namespace GasAguaAPI.Models
         
         [Column("fecha_entregado")]
         public DateTime? FechaEntregado { get; set; }
+        public double? Latitud { get; set; }
+        public double? Longitud { get; set; }
     }
 }

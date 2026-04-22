@@ -47,13 +47,6 @@ namespace GasAguaAPI.Controllers
                 return BadRequest("El producto especificado no existe.");
             }
 
-            // Validar que la dirección exista
-            var direccionExists = await _context.Direcciones
-                .AnyAsync(d => d.Id == pedidoDto.IdDireccion && d.IdUsuario == idCliente);
-            if (!direccionExists)
-            {
-                return BadRequest("La dirección especificada no existe o no pertenece al usuario.");
-            }
 
             // Crear el pedido
             var pedido = new Pedido
@@ -61,9 +54,11 @@ namespace GasAguaAPI.Controllers
                 Id = Guid.NewGuid(),
                 IdCliente = idCliente,
                 IdProducto = pedidoDto.IdProducto,
-                IdRepartidor = null, // Obligatoriamente NULL por ahora
-                Estado = "Pendiente", // Estado por defecto
-                FechaCreado = DateTime.UtcNow // Fecha y hora de creación
+                IdRepartidor = null,
+                Estado = "Pendiente",
+                FechaCreado = DateTime.UtcNow,
+                Latitud = pedidoDto.Latitud,
+                Longitud = pedidoDto.Longitud
             };
 
             _context.Pedidos.Add(pedido);
@@ -133,7 +128,8 @@ namespace GasAguaAPI.Controllers
     public class CrearPedidoDto
     {
         public Guid IdProducto { get; set; }
-        public Guid IdDireccion { get; set; }
         public int Cantidad { get; set; } = 1; // Opcional, por defecto 1
+        public double? Latitud { get; set; }
+        public double? Longitud { get; set; }
     }
 }
