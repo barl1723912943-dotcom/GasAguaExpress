@@ -2,6 +2,7 @@ package com.bryan.gasaguaexpress.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bryan.gasaguaexpress.R
 import com.bryan.gasaguaexpress.adapters.ProductoAdapter
 import com.bryan.gasaguaexpress.models.CrearPedidoRequest
+import com.bryan.gasaguaexpress.models.PedidoResponse
 import com.bryan.gasaguaexpress.network.ApiService
 import com.bryan.gasaguaexpress.network.NetworkModule
 import com.bryan.gasaguaexpress.utils.SessionManager
@@ -131,37 +133,38 @@ class ClienteActivity : AppCompatActivity() {
 
     private fun enviarPedidoAlServidor(pedidoRequest: CrearPedidoRequest) {
         Log.d("GPS_DEBUG", "Enviando pedido - lat: ${pedidoRequest.latitud}, lon: ${pedidoRequest.longitud}")
+
         lifecycleScope.launch {
             try {
                 val token = sessionManager.getToken() ?: ""
                 val authHeader = "Bearer $token"
                 val response = apiService.crearPedido(authHeader, pedidoRequest)
+
                 if (response.isSuccessful) {
-                    Log.d("GPS_DEBUG", "Pedido creado exitosamente")
-                    Toast.makeText(
-                        this@ClienteActivity,
-                        "¡Pedido enviado con éxito!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    // 1. Extraemos el pedido que el backend nos devuelve (con su ID generado)
+                    val pedidoCreado = response.body()
+
+                    // 2. Este es el Log.d seguro y corregido
+                    Log.d("GPS_DEBUG", "Pedido creado con éxito. ID: ${pedidoCreado?.id}")
+
+                    Toast.makeText(this@ClienteActivity, "¡Pedido enviado con éxito!", Toast.LENGTH_SHORT).show()
+
+                    // 3. ¡Magia! Abrimos la pantalla de seguimiento
+                    val intent = Intent(this@ClienteActivity, SeguimientoActivity::class.java)
+                    // Pasamos el ID del pedido a la nueva pantalla
+                    intent.putExtra("pedidoId", pedidoCreado?.id)
+                    startActivity(intent)
+
                 } else {
                     Log.e("GPS_DEBUG", "Error servidor: ${response.code()} - ${response.errorBody()?.string()}")
-                    Toast.makeText(
-                        this@ClienteActivity,
-                        "Error en el servidor: ${response.code()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@ClienteActivity, "Error en el servidor: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Log.e("GPS_DEBUG", "Excepción de red: ${e.message}")
-                Toast.makeText(
-                    this@ClienteActivity,
-                    "Error de red: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this@ClienteActivity, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
-
     private fun fetchProductos() {
         val token = sessionManager.getToken() ?: ""
         val authHeader = "Bearer $token"

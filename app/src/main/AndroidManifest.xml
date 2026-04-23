@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GasAguaExpress"
         android:usesCleartextTraffic="true">
+            
+        <activity android:name=".ui.SeguimientoActivity"/>
         <activity
             android:name=".ui.AdminActivity"
             android:exported="false" />
