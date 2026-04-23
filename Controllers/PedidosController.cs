@@ -47,7 +47,6 @@ namespace GasAguaAPI.Controllers
                 return BadRequest("El producto especificado no existe.");
             }
 
-
             // Crear el pedido
             var pedido = new Pedido
             {
@@ -65,6 +64,74 @@ namespace GasAguaAPI.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPedidos), new { id = pedido.Id }, pedido);
+        }
+
+        // GET: api/pedidos/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Pedido>> GetPedidoById(Guid id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized("Usuario no autenticado");
+
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido == null)
+                return NotFound("Pedido no encontrado");
+
+            return Ok(pedido);
+        }
+
+        // GET: api/pedidos/pendientes
+        [HttpGet("pendientes")]
+        public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosPendientes()
+        {
+            // Verificar si el usuario tiene rol 'repartidor'
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (userRole != "repartidor")
+            {
+                return Forbid();
+            }
+
+            var pedidosPendientes = await _context.Pedidos
+                .Where(p => p.Estado.ToLower() == "pendiente")
+                .ToListAsync();
+
+            return Ok(pedidosPendientes);
+        }
+
+        // PUT: api/pedidos/{id}/aceptar
+        [HttpPut("{id}/aceptar")]
+        public async Task<IActionResult> AceptarPedido(Guid id)
+        {
+            // Verificar si el usuario tiene rol 'repartidor'
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (userRole != "repartidor")
+            {
+                return Forbid();
+            }
+
+            // Extraer el id_repartidor del token JWT
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Usuario no autenticado");
+            }
+
+            var idRepartidor = Guid.Parse(userIdClaim.Value);
+
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido == null)
+            {
+                return NotFound("Pedido no encontrado.");
+            }
+
+            // Actualizar el estado del pedido y asignar al repartidor
+            pedido.Estado = "en_camino";
+            pedido.IdRepartidor = idRepartidor;
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         // GET: api/pedidos (mis pedidos)

@@ -145,6 +145,7 @@ C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.AssemblyInfo
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.csproj.CoreCompileInputs.cache
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.sourcelink.json
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\rjimswa.dswa.cache.json
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
@@ -160,4 +161,3 @@ C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\refint\GasAguaAPI.dll
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.pdb
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.genruntimeconfig.cache
 C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\ref\GasAguaAPI.dll
-C:\Users\Usuario\Untitled-1\GasAguaAPI\obj\Debug\net10.0\GasAguaAPI.sourcelink.json
