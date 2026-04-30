@@ -40,4 +40,22 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("id") id: String
     ): Response<PedidoResponse>
+
+    @PUT("api/repartidor/ubicacion")
+    suspend fun actualizarUbicacion(
+        @Header("Authorization") token: String,
+        @Body ubicacion: com.bryan.gasaguaexpress.models.UbicacionRequest
+    ): Response<Unit>
+
+    @GET("api/repartidor/{pedidoId}/ubicacion-repartidor")
+    suspend fun getUbicacionRepartidor(
+        @Header("Authorization") token: String,
+        @Path("pedidoId") pedidoId: String
+    ): Response<com.bryan.gasaguaexpress.models.UbicacionResponse>
+
+    @PUT("api/Pedidos/{id}/entregar")
+    suspend fun entregarPedido(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Response<Unit>
 }

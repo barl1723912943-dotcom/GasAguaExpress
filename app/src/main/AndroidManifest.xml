@@ -18,6 +18,11 @@
         android:usesCleartextTraffic="true">
             
         <activity android:name=".ui.SeguimientoActivity"/>
+        <activity android:name=".ui.MapaRepartidorActivity" android:exported="false"/>
+        
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
         <activity
             android:name=".ui.AdminActivity"
             android:exported="false" />

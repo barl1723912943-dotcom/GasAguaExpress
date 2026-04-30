@@ -75,8 +75,13 @@ class RepartidorActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     Toast.makeText(this@RepartidorActivity, "Pedido Aceptado", Toast.LENGTH_SHORT).show()
                     Log.d("REPARTIDOR", "Pedido aceptado: ${pedido.id}")
-                    // Recargar la lista de pedidos
-                    cargarPedidos()
+
+                    val intent = android.content.Intent(this@RepartidorActivity, MapaRepartidorActivity::class.java).apply {
+                        putExtra("pedidoId", pedido.id)
+                        putExtra("latitudCliente", pedido.latitud ?: 0.0)
+                        putExtra("longitudCliente", pedido.longitud ?: 0.0)
+                    }
+                    startActivity(intent)
                 } else {
                     Log.e("REPARTIDOR", "Error al aceptar pedido: ${response.code()}")
                     Toast.makeText(this@RepartidorActivity, "Error al aceptar el pedido", Toast.LENGTH_SHORT).show()

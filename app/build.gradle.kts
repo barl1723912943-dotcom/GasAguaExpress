@@ -10,6 +10,12 @@ android {
         }
     }
 
+    val mapsApiKey = rootProject.file("../local.properties").takeIf { it.exists() }?.readLines()
+        ?.find { it.startsWith("maps.api.key=") }
+        ?.substringAfter("maps.api.key=")
+        ?.trim()
+        ?: "MAPS_API_KEY_PLACEHOLDER"
+
     defaultConfig {
         applicationId = "com.bryan.gasaguaexpress"
         minSdk = 24
@@ -18,6 +24,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {
@@ -46,6 +53,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.8.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
