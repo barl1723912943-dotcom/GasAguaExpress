@@ -17,5 +17,11 @@ namespace GasAguaAPI.Models
         public decimal DeudaTotal { get; set; }
         
         public int TotalEntregas { get; set; }
+        
+        public double? UltimaLatitud { get; set; }
+        
+        public double? UltimaLongitud { get; set; }
+        
+        public DateTime? UltimaActualizacion { get; set; }
     }
 }

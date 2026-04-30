@@ -57,6 +57,8 @@ namespace GasAguaAPI.Data
                 entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
                 entity.Property(e => e.DeudaTotal).HasColumnName("deuda_total");
                 entity.Property(e => e.TotalEntregas).HasColumnName("total_entregas");
+                entity.Property(e => e.UltimaLatitud).HasColumnType("decimal(9,6)");
+                entity.Property(e => e.UltimaLongitud).HasColumnType("decimal(9,6)");
             });
 
             modelBuilder.Entity<Deuda>(entity =>

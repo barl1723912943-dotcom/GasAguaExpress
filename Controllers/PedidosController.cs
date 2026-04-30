@@ -54,7 +54,7 @@ namespace GasAguaAPI.Controllers
                 IdCliente = idCliente,
                 IdProducto = pedidoDto.IdProducto,
                 IdRepartidor = null,
-                Estado = "Pendiente",
+                Estado = "pendiente",
                 FechaCreado = DateTime.UtcNow,
                 Latitud = pedidoDto.Latitud,
                 Longitud = pedidoDto.Longitud
@@ -85,53 +85,67 @@ namespace GasAguaAPI.Controllers
         [HttpGet("pendientes")]
         public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosPendientes()
         {
-            // Verificar si el usuario tiene rol 'repartidor'
             var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
             if (userRole != "repartidor")
-            {
                 return Forbid();
-            }
 
-            var pedidosPendientes = await _context.Pedidos
-                .Where(p => p.Estado.ToLower() == "pendiente")
+            var pedidos = await _context.Pedidos
+                .Where(p => p.Estado != null && p.Estado.ToLower() == "pendiente" && p.IdRepartidor == null)
+                .OrderByDescending(p => p.FechaCreado)
                 .ToListAsync();
 
-            return Ok(pedidosPendientes);
+            return Ok(pedidos);
         }
 
         // PUT: api/pedidos/{id}/aceptar
         [HttpPut("{id}/aceptar")]
         public async Task<IActionResult> AceptarPedido(Guid id)
         {
-            // Verificar si el usuario tiene rol 'repartidor'
             var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
             if (userRole != "repartidor")
-            {
                 return Forbid();
-            }
 
-            // Extraer el id_repartidor del token JWT
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
-            {
-                return Unauthorized("Usuario no autenticado");
-            }
+                return Unauthorized();
 
             var idRepartidor = Guid.Parse(userIdClaim.Value);
-
             var pedido = await _context.Pedidos.FindAsync(id);
             if (pedido == null)
-            {
-                return NotFound("Pedido no encontrado.");
-            }
+                return NotFound();
 
-            // Actualizar el estado del pedido y asignar al repartidor
-            pedido.Estado = "en_camino";
             pedido.IdRepartidor = idRepartidor;
-
+            pedido.Estado = "en_camino";
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return NoContent();
+        }
+
+        // PUT: api/pedidos/{id}/entregar
+        [HttpPut("{id}/entregar")]
+        public async Task<IActionResult> EntregarPedido(Guid id)
+        {
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (userRole != "repartidor")
+                return Forbid();
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            var idRepartidor = Guid.Parse(userIdClaim.Value);
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido == null)
+                return NotFound();
+
+            if (pedido.IdRepartidor != idRepartidor)
+                return Forbid("No estás asignado a este pedido");
+
+            pedido.Estado = "entregado";
+            pedido.FechaEntregado = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         // GET: api/pedidos (mis pedidos)
@@ -181,9 +195,9 @@ namespace GasAguaAPI.Controllers
                 return NotFound("Pedido no encontrado.");
             }
 
-            // Asignar el repartidor y cambiar el estado a 'En Camino'
+            // Asignar el repartidor y cambiar el estado a 'en_camino'
             pedido.IdRepartidor = idRepartidor;
-            pedido.Estado = "En Camino";
+            pedido.Estado = "en_camino";
 
             await _context.SaveChangesAsync();
 
